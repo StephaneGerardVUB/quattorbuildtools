@@ -4,7 +4,7 @@ To build the container image:
 
 ```podman build -t quattorbuild -f Dockerfile .```
 
-Create a directory that will be shared between the host and the container. In this directory, do a ```git clone of this project.
+Create a directory that will be shared between the host and the container. In this directory, do a ```git clone``` of this project.
 
 To launch the container:
 
