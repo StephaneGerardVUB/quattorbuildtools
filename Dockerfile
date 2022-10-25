@@ -33,13 +33,13 @@ ENV QUATTOR_TEST_TEMPLATE_LIBRARY_CORE /quattor/template-library-core-master
 
 # set workdir to where we'll run the tests
 #COPY --chown=1000 . /quattor_test
-COPY --chown=1000 . /home
+#COPY --chown=1000 . /home
 #WORKDIR /quattor_test
 WORKDIR /home
 # yum-cleanup-repos.t must be run as a non-root user. It must also resolve
 # to a name (nobody) to avoid getpwuid($<) triggering a warning which fails
 # the tests.
-USER 1000
+#USER 1000
 ENV HOME /home
 
 # By default maven writes to $HOME which doesn't work for user=nobody
