@@ -48,15 +48,15 @@ function mvn_pack()
     mvn_run "clean package -Dprove.args=-v $MVN_ARGS"
 }
 
-function mvn_fast_pack()
-{
-    mvn_run "package -Dprove.args=-v $MVN_ARGS"
-}
-
 function mvn_release()
 {
-    mvn_run "-q -DautoVersionSubmodules=true -Dgpg.useagent=true -Darguments=-Dgpg.useagent=true -B -DreleaseVersion=$VERSION -DpushChanges=false clean release:prepare $MVN_ARGS"
+    mvn_run "-q -DautoVersionSubmodules=true -Dgpg.useagent=false -Darguments=-Dgpg.useagent=false -B -DreleaseVersion=$VERSION -DpushChanges=false clean release:prepare $MVN_ARGS"
 }
+
+#function mvn_release()
+#{
+#    mvn_run "-q -DautoVersionSubmodules=true -Dgpg.useagent=false -Darguments=-Dgpg.useagent=false -B -DreleaseVersion=$VERSION -DpushChanges=false clean package $MVN_ARGS"
+#}
 
 function _mvn_test_complete()
 {
