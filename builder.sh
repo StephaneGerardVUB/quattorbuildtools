@@ -49,8 +49,7 @@ function echo_info {
 
 function exit_usage {
     echo
-    echo "USAGE: releaser.sh RELEASE_NUMBER [RELEASE_CANDIDATE]"
-    echo "       RELEASE_NUMBER should be of the form YY.MM.N without leading zeros"
+    echo "USAGE: builder.sh REPOSITORY BRANCH VERSIONSTRING"
     exit 3
 }
 
