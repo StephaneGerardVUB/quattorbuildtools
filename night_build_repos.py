@@ -100,7 +100,11 @@ if args.status:
 
 # load json into a dict
 repos = {}
-with open('tobuild.json', 'r') as f:
+try:
+    f = open('tobuild.json', 'r')
+except IOError:
+    print('Cannot open tobuild.json. Use this command with --init flag to create this file.')
+else:
     repos = json.load(f)
 
 
@@ -128,6 +132,3 @@ for repo in repos.keys():
         repos[repo]['status'] = 'failed'
 with open('tobuild.json', 'w') as f:
     json.dump(repos, f)
-
-
-
