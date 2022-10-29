@@ -66,7 +66,7 @@ for repo in repos.keys():
 # build the repos
 with open(logfilename, 'a') as f:
     for repo in repos.keys():
-        f.write(repo + "\n\n")
+        f.write("\n" + repo + "\n\n")
         cmd = "./builder.sh " + repo + " " + repos[repo]['branch'] + " " + repos[repo]['toversion']
         result = subprocess.Popen(cmd, shell=True)
         opt = result.communicate()[0]
