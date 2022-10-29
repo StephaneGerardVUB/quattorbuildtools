@@ -70,7 +70,8 @@ with open(logfilename, 'a') as f:
         cmd = "./builder.sh " + repo + " " + repos[repo]['branch'] + " " + repos[repo]['toversion']
         result = subprocess.Popen(cmd, shell=True)
         opt = result.communicate()[0]
-        f.write(opt + "\n\n")
+        if opt:
+            f.write(opt + "\n\n")
         exitcode = result.returncode
         if exitcode == 0:
             f.write('DONE')
