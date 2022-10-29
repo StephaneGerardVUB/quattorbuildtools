@@ -8,6 +8,8 @@ BUILD=""
 MAXFILES=2048
 RELEASE_ROOT=$(dirname $(readlink -f "$0"))
 LIBRARY_CORE_DIR=$RELEASE_ROOT/src/template-library-core
+GIT_USER_NAME='Stephane GERARD'
+GIT_USER_EMAIL='stephane.gerard@vub.be'
 
 if [[ $(ulimit -n) -lt $MAXFILES ]]; then
   echo "INFO: Max open files (ulimit -n) is below $MAXFILES, trying to increase the limit for you."
@@ -74,6 +76,16 @@ function is_in_list () {
 
     return $found
 }
+
+# Check that HOME/.m2/settings.xml exists -> it contains the passphrase to unlock gpg key
+if [[ ! -f "$HOME/.m2/settings.xml" ]]; then
+    echo_error "Maven personal settings (~/.m2/settings.xml) is missing"
+    exit 2
+fi
+
+# Set git user and mail address
+git config --global user.name $GIT_USER_NAME
+git config --global user.email $GIT_USER_EMAIL
 
 # Check that dependencies required to perform a release are available
 missing_deps=0
