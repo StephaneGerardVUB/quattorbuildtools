@@ -11,7 +11,7 @@ from time import time
 # the maven-build process. The key 'toversion' gives the version string of the
 # the release you want to build.
 
-# data to initialize the json file if it does not exist yet
+# data to initialize tobuid.json file if it does not exist yet
 repolist = ['aii', 'CAF', 'CCM', 'cdp-listend', 'configuration-modules-core',
             'configuration-modules-grid', 'LC', 'ncm-cdispd', 'ncm-ncd',
             'ncm-query', 'ncm-lib-blockdevices']
@@ -34,8 +34,28 @@ with open(logfilename, 'w'): pass
 
 # process arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--init', action='store_true')
+parser.add_argument('--init', help='Initialize the JSON file', action='store_true')
+parser.add_argument('--edit', help='Edit the JSON file', action='store_true')
+parser.add_argument('--repo', help='Name of the repo to edit in the JSON')
+parser.add_argument('--branch', help='Branch of the repo in the JSON')
+parser.add_argument('--addprs', help='To add a comma-seperated list of PRs to the branch in the JSON')
 args = parser.parse_args()
+
+# check arguments (dependencies)
+if args.edit:
+    test = 0
+    if args.repo:
+        if args.branch:
+            test = 1
+        else:
+            if args.addprs:
+                test = 1
+            else:
+                print("Missing branch (--branch) OR comma-seperated list of PRs (--addprs)")
+                exit(1)
+    else:
+        print("With --edit flag, you must specify a repo with --repo")
+        exit(1)
 
 # initialize if asked to
 if args.init:
@@ -48,12 +68,22 @@ repos = {}
 try:
     f = open('tobuild.json', 'r')
 except IOError:
-    print('Cannot open tobuild.json. Use this command with --init flag to create this file.')
+    print("Cannot open 'tobuild.json'. Use this command with --init flag to create this file.")
     exit(1)
 else:
     repos = json.load(f)
 
-# update of the lists of PRs
+# edit json if aksed to
+if args.edit:
+    if args.branch:
+        repos[args.repo]['branch'] = args.branch
+    if args.addprs:
+        repos[args.repo]['prs'].append(args.addprs.split(','))
+    with open('tobuild.xml', 'w') as f:
+        json.dump(repos, f)
+    exit()
+
+# update of the lists of PRs (files named after the repo, used by builder.sh)
 for repo in repos.keys():
     prs_str = ''
     prs = repos[repo]['prs']
