@@ -3,82 +3,39 @@
 import json
 import subprocess
 import argparse
+from datetime import datetime
+
+# This script works together with a json file that contains a dictionary
+# where each key is the name of the Quattor repositories, and the corresponding
+# value is again a dict that specifies the branch and the PRs to be applied during
+# the maven-build process. The key 'toversion' gives the version string of the
+# the release you want to build.
 
 # data to initialize the json file if it does not exist yet
-data = {
-        "aii": {
-            "branch": "master",
-            "prs": [335,328],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "CAF": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "CCM": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "cdp-listend": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "configuration-modules-core": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "configuration-modules-grid": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "LC": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "ncm-cdispd": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "ncm-ncd": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "ncm-query": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        },
-        "ncm-lib-blockdevices": {
-            "branch": "master",
-            "prs": [],
-            "status": "",
-            "toversion": "22.10.0-rc2"
-        }
+repolist = ['aii', 'CAF', 'CCM', 'cdp-listend', 'configuration-modules-core',
+            'configuration-modules-grid', 'LC', 'ncm-cdispd', 'ncm-ncd',
+            'ncm-query', 'ncm-lib-blockdevices']
+branch_def = 'master'
+prs_def = []
+toversion_def = '22.10.0-rc2'
+data = {}
+for repo in repolist:
+    data[repo] = {}
+    data[repo]['branch'] = branch_def
+    data[repo]['prs'] = prs_def
+    data[repo]['toversion'] = toversion_def
 
-}
+# generate a timestamp
+dt = datetime.now()
+ts = int(datetime.timestamp(dt))
+
+# create the empty logfile for output of build processes
+logfilename = 'build_' + ts + '.log'
+with open(logfilename, 'w'): pass
 
 # process arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--init', action='store_true')
-parser.add_argument('--status', action='store_true')
 args = parser.parse_args()
 
 # initialize if asked to
@@ -87,26 +44,15 @@ if args.init:
         json.dump(data, f)
     exit()
 
-# display the status if asked to
-if args.status:
-    with open('tobuild.json', 'r') as f:
-        status = json.load(f)
-        for k,v in status.items():
-            print(k)
-            for kk,vv in v.items():
-                linestat = "    " + kk + ":" + str(vv)
-                print(linestat)
-    exit()
-
 # load json into a dict
 repos = {}
 try:
     f = open('tobuild.json', 'r')
 except IOError:
     print('Cannot open tobuild.json. Use this command with --init flag to create this file.')
+    exit(1)
 else:
     repos = json.load(f)
-
 
 # update of the lists of PRs
 for repo in repos.keys():
@@ -118,17 +64,16 @@ for repo in repos.keys():
         prs_str = prs_str[:-1]
         f.write(prs_str)
 
-# build the repos and update the statuses
-for repo in repos.keys():
-    if repos[repo]['status'] == 'done':
-        continue
-    cmd = "./builder.sh " + repo + " " + repos[repo]['branch'] + " " + repos[repo]['toversion']
-    result = subprocess.Popen(cmd, shell=True)
-    opt = result.communicate()[0]
-    exitcode = result.returncode
-    if exitcode == 0:
-        repos[repo]['status'] = 'done'
-    else:
-        repos[repo]['status'] = 'failed'
-with open('tobuild.json', 'w') as f:
-    json.dump(repos, f)
+# build the repos
+with open(logfilename, 'a') as f:
+    for repo in repos.keys():
+        f.write(repo + "\n\n")
+        cmd = "./builder.sh " + repo + " " + repos[repo]['branch'] + " " + repos[repo]['toversion']
+        result = subprocess.Popen(cmd, shell=True)
+        opt = result.communicate()[0]
+        f.write(opt + "\n\n")
+        exitcode = result.returncode
+        if exitcode == 0:
+            f.write('DONE')
+        else:
+            f.write('FAILED')
