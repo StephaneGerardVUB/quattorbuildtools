@@ -3,7 +3,7 @@
 import json
 import subprocess
 import argparse
-from datetime import datetime
+from time import time
 
 # This script works together with a json file that contains a dictionary
 # where each key is the name of the Quattor repositories, and the corresponding
@@ -26,8 +26,7 @@ for repo in repolist:
     data[repo]['toversion'] = toversion_def
 
 # generate a timestamp
-dt = datetime.now()
-ts = int(datetime.timestamp(dt))
+ts = int(time())
 
 # create the empty logfile for output of build processes
 logfilename = 'build_' + ts + '.log'
