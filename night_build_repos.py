@@ -26,7 +26,7 @@ for repo in repolist:
     data[repo]['toversion'] = toversion_def
 
 # generate a timestamp
-ts = int(time())
+ts = str(int(time()))
 
 # create the empty logfile for output of build processes
 logfilename = 'build_' + ts + '.log'
