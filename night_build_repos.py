@@ -39,6 +39,7 @@ parser.add_argument('--edit', help='Edit the JSON file', action='store_true')
 parser.add_argument('--repo', help='Name of the repo to edit in the JSON')
 parser.add_argument('--branch', help='Branch of the repo in the JSON')
 parser.add_argument('--addprs', help='To add a comma-seperated list of PRs to the branch in the JSON')
+parser.add_argument('--display', help='Show the content of the JSON file', action='store_true')
 args = parser.parse_args()
 
 # check arguments (dependencies)
@@ -72,6 +73,15 @@ except IOError:
     exit(1)
 else:
     repos = json.load(f)
+
+# display content of json file if asked to
+if args.display:
+    for key1, value1 in repos.items():
+        print(key1)
+        for key2, value2 in value1.items():
+            print("  " + key2 + ' ' + value2)
+    exit() 
+
 
 # edit json if aksed to
 if args.edit:
