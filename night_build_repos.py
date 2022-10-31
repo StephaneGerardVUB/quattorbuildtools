@@ -77,14 +77,16 @@ else:
 # display content of json file if asked to
 if args.display:
     for key1, value1 in repos.items():
-        print(key1)
+        print(key1 + ':')
         for key2, value2 in value1.items():
-            print("  " + key2 + ' ' + value2)
-    exit() 
+            print("  " + key2 + ': ' + str(value2))
+    exit()
 
 
 # edit json if aksed to
 if args.edit:
+    if not args.repo in repos:
+        repos[args.repo] = {}
     if args.branch:
         repos[args.repo]['branch'] = args.branch
     if args.addprs:
