@@ -36,6 +36,7 @@ parser.add_argument('--repo', help='Name of the repo to edit in the JSON')
 parser.add_argument('--branch', help='Branch of the repo in the JSON')
 parser.add_argument('--addprs', help='To add a comma-seperated list of PRs to the branch in the JSON')
 parser.add_argument('--display', help='Show the content of the JSON file', action='store_true')
+parser.add_argument('--delete', help='Delete a repo in the JSON file', action='store_true')
 args = parser.parse_args()
 
 # check arguments (dependencies)
@@ -52,6 +53,10 @@ if args.edit:
                 exit(1)
     else:
         print("With --edit flag, you must specify a repo with --repo")
+        exit(1)
+if args.delete:
+    if not args.repo:
+        print("Please specify the repo (--repo) you want to delete!")
         exit(1)
 
 # initialize if asked to
@@ -90,6 +95,13 @@ if args.edit:
         repos[args.repo]['branch'] = args.branch
     if args.addprs:
         repos[args.repo]['prs'].append(args.addprs.split(','))
+    with open('tobuild.json', 'w') as f:
+        json.dump(repos, f)
+    exit()
+
+# delete a repo if asked to
+if args.delete:
+    del repos[args.repo]
     with open('tobuild.json', 'w') as f:
         json.dump(repos, f)
     exit()
