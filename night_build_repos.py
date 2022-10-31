@@ -101,6 +101,9 @@ if args.edit:
 
 # delete a repo if asked to
 if args.delete:
+    if not args.repo in repos:
+        print("Repo " + args.repo + " does not exist!")
+        exit(1)
     del repos[args.repo]
     with open('tobuild.json', 'w') as f:
         json.dump(repos, f)
