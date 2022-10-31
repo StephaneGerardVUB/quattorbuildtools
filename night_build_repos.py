@@ -37,6 +37,7 @@ parser.add_argument('--branch', help='Branch of the repo in the JSON')
 parser.add_argument('--addprs', help='To add a comma-seperated list of PRs to the branch in the JSON')
 parser.add_argument('--display', help='Show the content of the JSON file', action='store_true')
 parser.add_argument('--delete', help='Delete a repo in the JSON file', action='store_true')
+parser.add_argument('--build', help='Build the repositories', action='store_true')
 args = parser.parse_args()
 
 # check arguments (dependencies)
