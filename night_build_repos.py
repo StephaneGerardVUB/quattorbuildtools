@@ -87,6 +87,9 @@ if args.display:
 if args.edit:
     if not args.repo in repos:
         repos[args.repo] = {}
+        repos[args.repo]['branch'] = branch_def
+        repos[args.repo]['prs'] = prs_def
+        repos[args.repo]['toversion'] = toversion_def
     if args.branch:
         repos[args.repo]['branch'] = args.branch
     if args.addprs:
