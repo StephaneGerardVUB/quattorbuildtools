@@ -28,10 +28,6 @@ for repo in repolist:
 # generate a timestamp
 ts = str(int(time()))
 
-# create the empty logfile for output of build processes
-logfilename = 'build_' + ts + '.log'
-with open(logfilename, 'w'): pass
-
 # process arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--init', help='Initialize the JSON file', action='store_true')
@@ -97,6 +93,10 @@ if args.edit:
     with open('tobuild.json', 'w') as f:
         json.dump(repos, f)
     exit()
+
+# create the empty logfile for output of build processes
+logfilename = 'build_' + ts + '.log'
+with open(logfilename, 'w'): pass
 
 # update of the lists of PRs (files named after the repo, used by builder.sh)
 for repo in repos.keys():
