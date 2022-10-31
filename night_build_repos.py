@@ -94,7 +94,7 @@ if args.edit:
         repos[args.repo]['branch'] = args.branch
     if args.addprs:
         repos[args.repo]['prs'].append(args.addprs.split(','))
-    with open('tobuild.xml', 'w') as f:
+    with open('tobuild.json', 'w') as f:
         json.dump(repos, f)
     exit()
 
