@@ -102,12 +102,19 @@ if args.edit:
 # delete a repo if asked to
 if args.delete:
     if not args.repo in repos:
-        print("Repo " + args.repo + " does not exist!")
+        print("Repo '" + args.repo + "' does not exist!")
         exit(1)
     del repos[args.repo]
     with open('tobuild.json', 'w') as f:
         json.dump(repos, f)
     exit()
+
+# if we reach this point, either the user wants to build
+# or there is nothing to do
+if not args.build:
+    print("Please specify what you want to do with options!")
+    print("If you want to build the repositories, provide --build option.")
+    exit(1)
 
 # create the empty logfile for output of build processes
 logfilename = 'build_' + ts + '.log'
