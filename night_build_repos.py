@@ -35,6 +35,7 @@ parser.add_argument('--edit', help='Edit the JSON file', action='store_true')
 parser.add_argument('--repo', help='Name of the repo to edit in the JSON')
 parser.add_argument('--branch', help='Branch of the repo in the JSON')
 parser.add_argument('--addprs', help='To add a comma-seperated list of PRs to the branch in the JSON')
+parser.add_argument('--delprs', help='To delete the list of PRs of a branch in the JSON', action='store_true')
 parser.add_argument('--display', help='Show the content of the JSON file', action='store_true')
 parser.add_argument('--delete', help='Delete a repo in the JSON file', action='store_true')
 parser.add_argument('--build', help='Build the repositories', action='store_true')
@@ -56,10 +57,10 @@ if args.edit:
         if args.branch:
             test = 1
         else:
-            if args.addprs:
+            if args.addprs or args.delprs:
                 test = 1
             else:
-                print("Missing branch (--branch) OR comma-seperated list of PRs (--addprs)")
+                print("Missing branch (--branch) OR comma-seperated list of PRs (--addprs) OR --delpars flag")
                 exit(1)
     else:
         print("With --edit flag, you must specify a repo with --repo")
@@ -105,6 +106,8 @@ if args.edit:
         repos[args.repo]['branch'] = args.branch
     if args.addprs:
         repos[args.repo]['prs'] += args.addprs.split(',')
+    if args.delprs:
+        repos[args.repo]['prs'] = []
     with open('tobuild.json', 'w') as f:
         json.dump(repos, f)
     exit()
