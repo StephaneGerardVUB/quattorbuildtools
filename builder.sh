@@ -146,6 +146,8 @@ patchfic="$RELEASE_ROOT/$REPO.patch"
 if [ -f $patchfic ]; then
     echo "Applying patches..."
     git apply $patchfic
+    git add .
+    git commit -m 'local patch'
 fi
 cd ..
 echo "Done."
