@@ -38,7 +38,16 @@ parser.add_argument('--addprs', help='To add a comma-seperated list of PRs to th
 parser.add_argument('--display', help='Show the content of the JSON file', action='store_true')
 parser.add_argument('--delete', help='Delete a repo in the JSON file', action='store_true')
 parser.add_argument('--build', help='Build the repositories', action='store_true')
+parser.add_argument('--onlyrepo', help='Name of the repo to build')
 args = parser.parse_args()
+
+# examples of commands:
+#   ./night_build_repo.py --init
+#   ./night_build_repo.py --edit --repo aii --branch 21.12.0
+#   ./night_build_repo.py --delete --repo foobar
+#   ./night_build_repo.py --display
+#   ./night_build_repo.py --build
+#   ./night_build_repo.py --build --only-repo foobar
 
 # check arguments (dependencies)
 if args.edit:
@@ -133,7 +142,12 @@ for repo in repos.keys():
 
 # build the repos
 with open(logfilename, 'a') as f:
-    for repo in repos.keys():
+    repolst = []
+    if args.onlyrepo:
+        repolst.append(args.onlyrepo)
+    else:
+        repolst = repos.keys()
+    for repo in repolst:
         f.write("\n" + repo + "\n\n")
         cmd = "./builder.sh " + repo + " " + repos[repo]['branch'] + " " + repos[repo]['toversion']
         result = subprocess.Popen(cmd, shell=True)
