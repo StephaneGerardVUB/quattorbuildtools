@@ -210,6 +210,15 @@ git config --global user.email $GIT_USER_EMAIL
 if gpg-agent; then
     if gpg --yes --sign $0; then
 
+        echo_info "Cloning the rest of repositories"
+        cd src/
+        for r in $REPOS_ONE_TAG $REPOS_BRANCH_TAG; do
+            if [[ ! -d $r ]]; then
+                git clone -q git@github.com:quattor/$r.git
+            fi
+        done
+        cd ..
+
         cd $RELEASE_ROOT
         mkdir -p target/
 
