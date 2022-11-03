@@ -104,7 +104,7 @@ if args.edit:
     if args.branch:
         repos[args.repo]['branch'] = args.branch
     if args.addprs:
-        repos[args.repo]['prs'].append(args.addprs.split(','))
+        repos[args.repo]['prs'] += append(args.addprs.split(','))
     with open('tobuild.json', 'w') as f:
         json.dump(repos, f)
     exit()
