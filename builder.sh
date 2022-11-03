@@ -141,6 +141,12 @@ if [[ -f $prsfic ]]; then
         fi
     done
 fi
+# Applying patches if they exist (file <repo_name>.patch)
+patchfic="$RELEASE/root/$REPO.patch"
+if [ -f $patchfic ]; then
+    echo "Applying patches..."
+    git apply $patchfic
+fi
 cd ..
 echo "Done."
 is_in_list $REPO "$REPOS_MVN"
