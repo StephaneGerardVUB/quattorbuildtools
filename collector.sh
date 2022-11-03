@@ -199,8 +199,8 @@ else
     exit_usage
 fi
 
-if gpg-agent; then
-    if gpg --yes --sign $0; then
+#if gpg-agent; then
+#    if gpg --yes --sign $0; then
 
         cd $RELEASE_ROOT
         mkdir -p target/
@@ -250,5 +250,5 @@ if gpg-agent; then
         echo_success "---------------- Update of template-library-core successfully completed ----------------"
 
         echo_success "RELEASE COMPLETED"
-    fi
-fi
+#    fi
+#fi
