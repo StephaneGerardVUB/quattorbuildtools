@@ -8,6 +8,8 @@ BUILD=""
 MAXFILES=2048
 RELEASE_ROOT=$(dirname $(readlink -f "$0"))
 LIBRARY_CORE_DIR=$RELEASE_ROOT/src/template-library-core
+GIT_USER_NAME='Stephane GERARD'
+GIT_USER_EMAIL='stephane.gerard@vub.be'
 
 if [[ $(ulimit -n) -lt $MAXFILES ]]; then
   echo "INFO: Max open files (ulimit -n) is below $MAXFILES, trying to increase the limit for you."
@@ -173,8 +175,7 @@ function echo_info {
 
 function exit_usage {
     echo
-    echo "USAGE: releaser.sh RELEASE_NUMBER [RELEASE_CANDIDATE]"
-    echo "       RELEASE_NUMBER should be of the form YY.MM.N without leading zeros"
+    echo "USAGE: collector.sh VERSION_STRING"
     exit 3
 }
 
@@ -199,8 +200,15 @@ else
     exit_usage
 fi
 
-#if gpg-agent; then
-#    if gpg --yes --sign $0; then
+# launch gpg-agent
+gpg-agent --daemon
+
+# Set git user and mail address
+git config --global user.name $GIT_USER_NAME
+git config --global user.email $GIT_USER_EMAIL
+
+if gpg-agent; then
+    if gpg --yes --sign $0; then
 
         cd $RELEASE_ROOT
         mkdir -p target/
@@ -250,5 +258,5 @@ fi
         echo_success "---------------- Update of template-library-core successfully completed ----------------"
 
         echo_success "RELEASE COMPLETED"
-#    fi
-#fi
+    fi
+fi
