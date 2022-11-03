@@ -214,7 +214,7 @@ if gpg-agent; then
         cd src/
         for r in $REPOS_ONE_TAG $REPOS_BRANCH_TAG; do
             if [[ ! -d $r ]]; then
-                git clone -q git@github.com:quattor/$r.git
+                git clone -q https://github.com/quattor/$r.git
             fi
         done
         cd ..
