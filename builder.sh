@@ -142,7 +142,7 @@ if [[ -f $prsfic ]]; then
     done
 fi
 # Applying patches if they exist (file <repo_name>.patch)
-patchfic="$RELEASE/root/$REPO.patch"
+patchfic="$RELEASE_ROOT/$REPO.patch"
 if [ -f $patchfic ]; then
     echo "Applying patches..."
     git apply $patchfic
