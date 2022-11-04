@@ -9,7 +9,7 @@ ADD https://codeload.github.com/quattor/template-library-core/tar.gz/master /qua
 RUN tar xvfz template-library-core-master.tar.gz
 
 # Install dependencies
-RUN yum install -y maven epel-release rpm-build createrepo
+RUN yum install -y maven epel-release rpm-build createrepo rpm-sign
 RUN rpm -U http://yum.quattor.org/devel/quattor-release-1-1.noarch.rpm
 
 # The available version of perl-Test-Quattor is too old for mvnprove.pl to
@@ -44,5 +44,5 @@ ENV HOME /home
 
 # By default maven writes to $HOME which doesn't work for user=nobody
 #ENV MVN_ARGS -Dmaven.repo.local=/tmp/.m2
-# Default action on running the container is to run all tests 
+# Default action on running the container is to run all tests
 #CMD . /usr/bin/mvn_test.sh && mvn_test
