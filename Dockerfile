@@ -16,7 +16,7 @@ RUN rpm -U http://yum.quattor.org/devel/quattor-release-1-1.noarch.rpm
 # work, but this is a quick way of pulling in a lot of required dependencies.
 # Surprisingly `which` is not installed by default and panc depends on it.
 # libselinux-utils is required for /usr/sbin/selinuxenabled
-RUN yum install -y perl-Test-Quattor which panc aii-ks ncm-lib-blockdevices \
+RUN yum install --nogpgcheck -y perl-Test-Quattor which panc aii-ks ncm-lib-blockdevices \
     ncm-ncd git libselinux-utils sudo perl-Crypt-OpenSSL-X509 \
     perl-Data-Compare perl-Date-Manip perl-File-Touch perl-JSON-Any \
     perl-Net-DNS perl-Net-FreeIPA perl-Net-OpenNebula \
@@ -32,17 +32,10 @@ RUN cpanm install Git::Repository Data::Structure::Util
 ENV QUATTOR_TEST_TEMPLATE_LIBRARY_CORE /quattor/template-library-core-master
 
 # set workdir to where we'll run the tests
-#COPY --chown=1000 . /quattor_test
-#COPY --chown=1000 . /home
-#WORKDIR /quattor_test
 WORKDIR /home
 # yum-cleanup-repos.t must be run as a non-root user. It must also resolve
 # to a name (nobody) to avoid getpwuid($<) triggering a warning which fails
 # the tests.
-#USER 1000
+RUN useradd -u 1000 -d /home bob
+USER 1000
 ENV HOME /home
-
-# By default maven writes to $HOME which doesn't work for user=nobody
-#ENV MVN_ARGS -Dmaven.repo.local=/tmp/.m2
-# Default action on running the container is to run all tests
-#CMD . /usr/bin/mvn_test.sh && mvn_test
