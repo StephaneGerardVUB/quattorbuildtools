@@ -40,13 +40,14 @@ As the gpg plugin of Maven will require the passphrase to unlock the private key
 ### Edit the JSON file
 * To add a new entry in the JSON:
 
-```./batch_build_repos.py --edit --repo <repo> --branch <branch>
-```
+```./batch_build_repos.py --edit --repo <repo> --branch <branch>```
+
 * To specify a comma-seperated list of PRs that you want to merge to the branch of the repository:
-```./batch_build_repos.py --edit --repo <repo> --addprs <list_of_prs>
-```
+
+```./batch_build_repos.py --edit --repo <repo> --addprs <list_of_prs>```
+
 The specified will be added to the previous ones.
 
 * To remove the PRs for a repository:
-```./batch_build_repos.py --edit --repo <repo> --delprs
-```
+
+```./batch_build_repos.py --edit --repo <repo> --delprs```
