@@ -38,6 +38,15 @@ As the gpg plugin of Maven will require the passphrase to unlock the private key
 </settings>
 ```
 ### Edit the JSON file
+
+* To create a default JSON file if it does not exist yet:
+
+```./batch_build_repos.py --init```
+
+* To display the content of the JSON:
+
+```./batch_build_repos.py --display```
+
 * To add a new entry in the JSON:
 
 ```./batch_build_repos.py --edit --repo <repo> --branch <branch>```
@@ -51,3 +60,16 @@ The specified will be added to the previous ones.
 * To remove the PRs for a repository:
 
 ```./batch_build_repos.py --edit --repo <repo> --delprs```
+
+* To build all the repositories from the JSON:
+
+```./batch_build_repos.py --build```
+
+* To build everything except a comma-separated list of repositories:
+
+```./batch_build_repos.py --build --ignore <list_of_repositories>```
+
+* To only build a comma-separated list of repositories:
+
+```./batch_build_repos.py --build --only <list_of_repositories>```
+
