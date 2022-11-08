@@ -39,16 +39,19 @@ parser.add_argument('--delprs', help='To delete the list of PRs of a branch in t
 parser.add_argument('--display', help='Show the content of the JSON file', action='store_true')
 parser.add_argument('--delete', help='Delete a repo in the JSON file', action='store_true')
 parser.add_argument('--build', help='Build the repositories', action='store_true')
-parser.add_argument('--onlyrepo', help='Name of the repo to build')
+parser.add_argument('--only', help='Names of the repos to build (comma seperated list)')
+parser.add_argument('--ignore', help='Names of the repos to ignore (comma-seperated list)')
 args = parser.parse_args()
 
 # examples of commands:
 #   ./night_build_repo.py --init
 #   ./night_build_repo.py --edit --repo aii --branch 21.12.0
+#   ./night_build_repo.py --edit --repo aii --delprs
 #   ./night_build_repo.py --delete --repo foobar
 #   ./night_build_repo.py --display
 #   ./night_build_repo.py --build
-#   ./night_build_repo.py --build --only-repo foobar
+#   ./night_build_repo.py --build --ignore foo,bar
+#   ./night_build_repo.py --build --onlyrepo foo,bar
 
 # check arguments (dependencies)
 if args.edit:
@@ -129,6 +132,11 @@ if not args.build:
     print("If you want to build the repositories, provide --build option.")
     exit(1)
 
+# check arguments: options --ignore and --only are mutually exclusive
+if args.ignore and args.only:
+    print("Options --ignore and --only are mutually exclusive!")
+    exit(1)
+
 # create the empty logfile for output of build processes
 logfilename = 'build_' + ts + '.log'
 with open(logfilename, 'w'): pass
@@ -145,11 +153,16 @@ for repo in repos.keys():
 
 # build the repos
 with open(logfilename, 'a') as f:
+    # build list of repos to build
     repolst = []
-    if args.onlyrepo:
-        repolst.append(args.onlyrepo)
+    if args.only:
+        repolst = args.only.split(',')
+    elif args.ignore:
+        repostoignore = args.ignore.split(',')
+        repolst = [repo for repo in repos.keys() not in repostoignore]
     else:
         repolst = repos.keys()
+
     for repo in repolst:
         f.write("\n" + repo + "\n\n")
         cmd = "./builder.sh " + repo + " " + repos[repo]['branch'] + " " + repos[repo]['toversion']
