@@ -19,7 +19,7 @@ Inside the container:
 
 ## Batch builder
 
-With the script <b>batch_build_repos.py</b>, you can build a list of Quattor repositories that are specified in a JSON file <b>tobuild.json</b>. For each repository, the dictionary in the JSON will tell which branch to compile, as well as the list of PRs to apply before building, and the final version string to apply to the RPM packages.
+With the script <b>batch_build_repos.py</b>, you can build a list of Quattor repositories that are specified in a JSON file <b>tobuild.json</b>. For each repository, the dictionary in the JSON will tell which branch to compile, as well as the list of PRs to apply before building, and the final version string to apply to the generated RPM packages. This script comes with an help (--help).
 
 As the gpg plugin of Maven will require the passphrase to unlock the private key, it can be fixed by creating the following settings.xml in the $HOME/.m2 directory:
 ```<settings>
@@ -36,4 +36,17 @@ As the gpg plugin of Maven will require the passphrase to unlock the private key
     <activeProfile>gpg</activeProfile>
   </activeProfiles>
 </settings>
+```
+### Edit the JSON file
+* To add a new entry in the JSON:
+
+```./batch_build_repos.py --edit --repo <repo> --branch <branch>
+```
+* To specify a comma-seperated list of PRs that you want to merge to the branch of the repository:
+```./batch_build_repos.py --edit --repo <repo> --addprs <list_of_prs>
+```
+The specified will be added to the previous ones.
+
+* To remove the PRs for a repository:
+```./batch_build_repos.py --edit --repo <repo> --delprs
 ```
