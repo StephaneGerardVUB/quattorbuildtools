@@ -164,7 +164,7 @@ with open(logfilename, 'a') as f:
         repolst = args.only.split(',')
     elif args.ignore:
         repostoignore = args.ignore.split(',')
-        repolst = [repo for repo in repos.keys() not in repostoignore]
+        repolst = [repo for repo in repos.keys() if repo not in repostoignore]
     else:
         repolst = repos.keys()
 
