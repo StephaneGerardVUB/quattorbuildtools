@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import json
 import subprocess
 import argparse
@@ -142,12 +143,16 @@ logfilename = 'build_' + ts + '.log'
 with open(logfilename, 'w'): pass
 
 # update of the lists of PRs (files named after the repo, used by builder.sh)
+prspath = 'prs'
+if not os.path.isdir(prspath):
+    os.mkdir(prspath)
 for repo in repos.keys():
     prs_str = ''
     prs = repos[repo]['prs']
     for pr in prs:
         prs_str = prs_str + str(pr) + ' '
-    with open(repo, 'w') as f:
+    namefic = os.path.join(prspath, repo)
+    with open(namefic, 'w') as f:
         prs_str = prs_str[:-1]
         f.write(prs_str)
 

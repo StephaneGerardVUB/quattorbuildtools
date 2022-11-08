@@ -126,7 +126,7 @@ fi
 git clone -q https://github.com/quattor/$REPO.git
 cd $REPO
 git checkout -q $BRANCH
-prsfic="$RELEASE_ROOT/$REPO"
+prsfic="$RELEASE_ROOT/prs/$REPO"
 if [[ -f $prsfic ]]; then
     echo "Fetching and merging the requested PRs..."
     readarray -t prs < $prsfic
