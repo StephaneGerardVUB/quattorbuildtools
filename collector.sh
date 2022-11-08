@@ -229,7 +229,7 @@ if gpg-agent; then
         cd target/
 
         echo_info "Signing RPMs"
-        rpm --resign $VERSION/*.rpm
+        rpmsign --addsign $VERSION/*.rpm
 
         echo_info "Creating repository"
         createrepo -s sha $VERSION/
