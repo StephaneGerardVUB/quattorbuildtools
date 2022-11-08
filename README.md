@@ -19,7 +19,7 @@ Inside the container:
 
 ## Batch builder
 
-With the script *batch_build_repos.py*, you can build a list of Quattor repositories that are specified in a JSON file *tobuild.json*. For each repository, the dictionary in the JSON will tell which branch to compile, as well as the list of PRs to apply before building, and the final version string to apply to the RPM packages.
+With the script <b>batch_build_repos.py</b>, you can build a list of Quattor repositories that are specified in a JSON file <b>tobuild.json</b>. For each repository, the dictionary in the JSON will tell which branch to compile, as well as the list of PRs to apply before building, and the final version string to apply to the RPM packages.
 
 As the gpg plugin of Maven will require the passphrase to unlock the private key, it can be fixed by creating the following settings.xml in the $HOME/.m2 directory:
 ```<settings>
